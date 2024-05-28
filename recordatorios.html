@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordatorio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: black;
+        }
+        .reminder {
+            background-color: #6fb1c8;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+        }
+        .reminder h2 {
+            margin-top: 0;
+            color: white;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            color: black;
+            margin-top: 10px;
+            font-weight: 900;
+        }
+        select, input {
+            margin-top: 5px;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button[type="submit"] {
+            background-color: #293b5f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 900;
+        }
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .bottom-menu a {
+            text-decoration: none;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .bottom-menu a:hover {
+            text-decoration: underline;
+        }
+        .bottom-menu a i {
+            margin-bottom: 5px;
+        }
+        .bottom-menu a p {
+            margin: 0;
+        }
+        .bottom-menu a .word {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="reminder">
+        <h2>RECORDATORIO</h2>
+        <form id="reminder-form">
+            <label for="medication-name">Nombre del Medicamento:</label>
+            <input type="text" id="medication-name" required>
+
+            <label for="dose-time">Hora de la Dosis:</label>
+            <input type="time" id="dose-time" required>
+
+            <label for="regularity">Regularidad:</label>
+            <select id="regularity" onchange="toggleOtherInput()">
+                <option value="diario">Diariamente</option>
+                <option value="semanal">Semanal</option>
+                <option value="mensual">Mensual</option>
+                
+                
+            </select>
+
+            <label for="other-regularity" id="other-label" style="display: none;">Días:</label>
+            <input type="number" id="other-regularity" style="display: none;" min="1">
+
+            <label for="units">Unidades:</label>
+            <input type="number" id="units" value="1" min="1" required>
+
+            <label for="start-date">Inicio del Tratamiento:</label>
+            <input type="date" id="start-date" required>
+
+            <label for="end-date">Fin del Tratamiento:</label>
+            <input type="date" id="end-date" required>
+
+            <button type="submit"><i class="fas fa-save"></i> GUARDAR</button>
+        </form>
+
+        <div class="bottom-menu">
+            <a href="lista_record.html"><div class="word"><p>    Lista de recordatorios</p></div></a>
+            <a href="index.html"><div class="word"><p>    Agregar medicamento</p></div></a>
+            <a href="historial.html"><i class="fas fa-history"></i><div class="word"><p>Historial</p></div></a>
+        </div>
+    </div>
+
+    <script>
+        // Función para mostrar/ocultar el campo "Otro" en la regularidad
+        function toggleOtherInput() {
+            const regularitySelect = document.getElementById('regularity');
+            const otherInput = document.getElementById('other-regularity');
+            const otherLabel = document.getElementById('other-label');
+            if (regularitySelect.value === 'otro') {
+                otherInput.style.display = 'block';
+                otherLabel.style.display = 'block';
+            } else {
+                otherInput.style.display = 'none';
+                otherLabel.style.display = 'none';
+            }
+        }
+
+        // Función para cargar los datos del recordatorio a editar
+        function cargarDatosRecordatorio() {
+            const editIndex = localStorage.getItem('editIndex');
+            if (editIndex !== null) {
+                const reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+                const reminder = reminders[editIndex];
+                document.getElementById('medication-name').value = reminder.medicationName;
+                document.getElementById('dose-time').value = reminder.doseTime;
+                document.getElementById('regularity').value = reminder.regularity.includes('días') ? 'otro' : reminder.regularity;
+                document.getElementById('units').value = reminder.units;
+                document.getElementById('start-date').value = reminder.startDate;
+                document.getElementById('end-date').value = reminder.endDate;
+                if (reminder.regularity.includes('días')) {
+                    document.getElementById('other-regularity').value = reminder.regularity.split(' ')[0];
+                    toggleOtherInput();
+                }
+            }
+        }
+
+        // Manejo del envío del formulario
+        document.getElementById('reminder-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const medicationName = document.getElementById('medication-name').value;
+            const doseTime = document.getElementById('dose-time').value;
+            const regularity = document.getElementById('regularity').value;
+            const units = document.getElementById('units').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            let actualRegularity = regularity;
+
+            // Si la regularidad es "Otro", obtiene el valor de días especificado
+            if (regularity === 'otro') {
+                actualRegularity = document.getElementById('other-regularity').value + ' días';
+            }
+
+            // Crea el objeto recordatorio
+            const reminder = {
+                medicationName,
+                doseTime,
+                regularity: actualRegularity,
+                units,
+                startDate,
+                endDate
+            };
+
+            // Recupera los recordatorios almacenados
+            let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+            const editIndex = localStorage.getItem('editIndex');
+            if (editIndex !== null) {
+                // Editar el recordatorio existente
+                reminders[editIndex] = reminder;
+                localStorage.removeItem('editIndex'); // Elimina el índice de edición del localStorage
+            } else {
+                // Añadir un nuevo recordatorio
+                reminders.push(reminder);
+            }
+            // Guardar en localStorage
+            localStorage.setItem('reminders', JSON.stringify(reminders));
+            alert('Recordatorio guardado exitosamente');
+            window.location.href = "lista_record.html"; // Redirige a la página de lista de recordatorios
+        });
+
+        // Cargar datos del recordatorio si está en modo edición
+        cargarDatosRecordatorio();
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://apis.google.com/js/api.js"></script>
+    <meta name="google-signin-client_id" content="239778569936-gl0h772bvngls0qkqsl0g13441uk8ajq.apps.googleusercontent.com">
+    <title>Notificaciones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: black;
+        }
+        .reminder {
+            background-color: #6fb1c8;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+        }
+        .reminder h2 {
+            margin-top: 0;
+            color: white;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            color: black;
+            margin-top: 10px;
+            font-weight: 900;
+        }
+        select, input {
+            margin-top: 5px;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button[type="submit"] {
+            background-color: #293b5f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 900;
+        }
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .bottom-menu a {
+            text-decoration: none;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .bottom-menu a:hover {
+            text-decoration: underline;
+        }
+        .bottom-menu a i {
+            margin-bottom: 5px;
+        }
+        .bottom-menu a p {
+            margin: 0;
+        }
+        .bottom-menu a .word {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Estilos para la notificación personalizada */
+        .notification-container {
+            background-color: #82A9AB;
+            width: 300px;
+            height: 500px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        .notification-header img {
+            margin-right: 10px;
+        }
+        .notification-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .notification-date {
+            font-size: 14px;
+            margin-bottom: -90px;
+            text-align: left;
+            color: #000;
+        }
+        .medication-info {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            color: #000;
+            text-align: left;
+        }
+        .take-button {
+            background-color: #3b4a60;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+        }
+        .footer img {
+            cursor: pointer;
+        }
+
+        /* Estilos para el fondo oscuro del modal */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                        console.log('Service Worker registrado con éxito:', registration.scope);
+                    }, function(err) {
+                        console.error('Error al registrar el Service Worker:', err);
+                    });
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="reminder">
+        <h2>Notificaciones</h2>
+        <form id="reminder-form">
+            <label for="medication-name">Nombre del Medicamento:</label>
+            <input type="text" id="medication-name" required>
+            <label for="dose-time">Hora de la Dosis:</label>
+            <input type="time" id="dose-time" required>
+            <label for="regularity">Regularidad:</label>
+            <select id="regularity" onchange="toggleOtherRegularity()" required>
+                <option value="diario">Diario</option>
+                <option value="otro">Otro</option>
+            </select>
+            <div id="other-regularity-container" style="display: none;">
+                <label for="other-regularity">Especificar Regularidad (días):</label>
+                <input type="number" id="other-regularity" min="1">
+            </div>
+            <label for="units">Unidades por Dosis:</label>
+            <input type="number" id="units" required min="1">
+            <label for="start-date">Fecha de Inicio:</label>
+            <input type="date" id="start-date" required>
+            <label for="end-date">Fecha de Fin:</label>
+            <input type="date" id="end-date" required>
+            <button type="submit">GUARDAR</button>
+        </form>
+    </div>
+    <div class="bottom-menu">
+        <a href="index.html">
+            <div class="word">
+                <i class="fa fa-home"></i>
+                <p>Inicio</p>
+            </div>
+        </a>
+        <a href="historial.html">
+            <div class="word">
+                <i class="fa fa-history"></i>
+                <p>Historial</p>
+            </div>
+        </a>
+        <a href="recordatorio.html">
+            <div class="word">
+                <i class="fa fa-bell"></i>
+                <p>Recordatorio</p>
+            </div>
+        </a>
+    </div>
+</body>
+</html>

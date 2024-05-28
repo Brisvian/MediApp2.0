@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Recordatorios</title>
+    <style>
+        /* Estilos CSS aquí */
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6da1a6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+        }
+        .header h2 {
+            margin: 10px 0;
+            font-size: 24px;
+            color: white;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin-top: 20px;
+            flex-grow: 1;
+            overflow-y: auto; /* Añadido para permitir desplazamiento si es necesario */
+        }
+        .reminder {
+            background-color: #f3f3f3;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .reminder p {
+            margin: 0;
+            color: #333;
+        }
+        .edit-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer; /* Añadido para indicar que es clicable */
+        }
+        .add-reminder {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 20px; /* Agrega margen inferior */
+        }
+        .add-reminder a {
+            color: white;
+            text-decoration: none;
+        }
+        .navbar {
+            width: 100%;
+            background-color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-around; /* Alinea los elementos horizontalmente */
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            text-decoration: none;
+            color: #6da1a6;
+            font-size: 14px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .navbar a img {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 5px; /* Agrega margen inferior a los iconos */
+        }
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .bottom-menu a {
+            text-decoration: none;
+            color: black;
+        }
+        .bottom-menu a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="imagenes/recordatorio.png" alt="" class="header-image">
+        <h2>Lista de recordatorios</h2>
+    </div>
+    <div class="container" id="reminderContainer">
+        <!-- Contenedor donde se mostrarán los recordatorios -->
+        
+    </div>
+    <div class="add-reminder">
+        <a href="recordatorios.html">+ Añadir recordatorio</a>
+    </div>
+    <div class="navbar">
+        <a href="index.html">
+            <img src="imagenes/recordatorio.png" alt="Agregar medicamento">
+            <p>Agregar medicamento</p>
+        </a>
+        <a href="historial.html">
+            <img src="imagenes/historialm.png" alt="Historial">
+            <p>Historial</p>
+        </a>
+    </div>
+
+    <script>
+        // Función para cargar y mostrar los recordatorios guardados
+        function mostrarRecordatorios() {
+            var container = document.getElementById("reminderContainer");
+            container.innerHTML = ""; // Limpiar el contenido existente
+
+            // Obtener los recordatorios guardados del localStorage
+            var reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+
+            // Iterar sobre cada recordatorio y agregarlo al contenedor
+            reminders.forEach(function(reminder, index) {
+                var reminderDiv = document.createElement("div");
+                reminderDiv.classList.add("reminder");
+
+                var reminderInfo = document.createElement("div");
+                var reminderText = document.createElement("p");
+                
+                // Construir el contenido del texto con HTML
+                reminderText.innerHTML = "<strong>Medicamento:</strong> " + reminder.medicationName + "<br>" +
+                                        "<strong>Dosis:</strong> " + reminder.units + "<br>" +
+                                        "<strong>Hora:</strong> " + reminder.doseTime + "<br>" +
+                                        "<strong>Inicio:</strong> " + reminder.startDate + "<br>" +
+                                        "<strong>Fin:</strong> " + reminder.endDate;
+                
+                reminderInfo.appendChild(reminderText);
+
+                var editIcon = document.createElement("img");
+                editIcon.src = "imagenes/editar.png"; // Asegúrate de tener esta imagen en la carpeta de imágenes
+                editIcon.classList.add("edit-icon");
+                editIcon.onclick = function() {
+                    editarRecordatorio(index);
+                };
+
+                reminderDiv.appendChild(reminderInfo);
+                reminderDiv.appendChild(editIcon);
+                container.appendChild(reminderDiv);
+            });
+        }
+
+        // Función para editar un recordatorio
+        function editarRecordatorio(index) {
+            // Guardar el índice del recordatorio a editar en el localStorage
+            localStorage.setItem('editIndex', index);
+            // Redirigir a la página de edición de recordatorios
+            window.location.href = "recordatorios.html";
+        }
+
+        // Mostrar los recordatorios al cargar la página
+        mostrarRecordatorios();
+    </script>
+</body>
+</html>

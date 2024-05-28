@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6da1a6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .header img {
+            width: 50px;
+            height: 50px;
+        }
+        .header h2 {
+            margin: 0px 0;
+            font-size: 25px;
+            color: white;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin-top: 20px;
+            flex-grow: 1;
+            overflow-y: auto; /* Añadido para permitir desplazamiento si es necesario */
+        }
+        .record {
+            background-color: #f3f3f3;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .record p {
+            margin: 0;
+            color: #333;
+        }
+        .status {
+            width: 24px;
+            height: 24px;
+        }
+        .navbar {
+            width: 100%;
+            background-color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            text-decoration: none;
+            color: #6da1a6;
+            font-size: 14px;
+            text-align: center;
+        }
+        .navbar a img {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="imagenes/historial.png" alt="Historial">
+        <h2>Historial</h2>
+    </div>
+    <div class="container">
+        <div class="record">
+            <div>
+                <p>Lunes, 21 de abril del 2024</p>
+                <p>Paracetamol<br>8:00 am</p>
+            </div>
+            <img src="imagenes/correcto.png" class="status" alt="Hecho">
+        </div>
+        <div class="record">
+            <div>
+                <p>Martes, 22 de abril del 2024</p>
+                <p>Paracetamol<br>8:00 am</p>
+            </div>
+            <img src="imagenes/incorrecto.png" class="status" alt="No hecho">
+        </div>
+    </div>
+    <div class="navbar">
+    
+    </div>
+</body>
+</html>
