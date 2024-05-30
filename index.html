@@ -18,20 +18,18 @@
         }
         .container {
             display: grid;
-            grid-template-columns: 1fr; /* Cambiar a una sola columna en pantallas pequeñas */
+            grid-template-columns: 1fr;
             gap: 10px;
             padding: 20px;
             width: 100%;
             max-width: 400px;
             box-sizing: border-box;
         }
-
         @media(min-width: 600px) {
-         .container {
-             grid-template-columns: repeat(2, 1fr); /* Volver a dos columnas en pantallas más grandes */
-             }
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
-
         .item {
             background-color: white;
             border: 2px dashed #333;
@@ -69,11 +67,11 @@
             height: 24px;
         }
         h2 {
-            margin-top: -10px; /* Ajusta el valor según sea necesario */
-            margin-left: 30px; /* Ajusta el valor según sea necesario */
+            margin-top: -10px;
+            margin-left: 30px;
         }
         .icono-arriba img {
-            margin-top: -50px; /* Ajusta el valor según sea necesario */
+            margin-top: -50px;
         }
         .clear-cache-button {
             margin-top: 20px;
@@ -95,7 +93,6 @@
                 <img src="imagenes/botonmas.png" alt="Agregar">
             </a>
         </div>
-        
     </div>
     <button class="clear-cache-button" onclick="clearCache()">Borrar Cache</button>
     <div class="navbar">
@@ -112,9 +109,7 @@
             <p>Historial</p>
         </a>
     </div>
-
     <script>
-        // Array de imágenes que se utilizarán para los medicamentos
         const images = [
             'imagenes/pastilla1.png',
             'imagenes/pastilla2.png',
@@ -122,33 +117,22 @@
             'imagenes/pastilla4.png',
             'imagenes/fotomedicamento.png'
         ];
-
-        // Se ejecuta cuando la página se carga
         window.onload = function() {
             const medicationContainer = document.getElementById('medication-container');
-            // Recupera los recordatorios del localStorage
             let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
-
-            // Recorre cada recordatorio y lo agrega al contenedor de medicamentos
             reminders.forEach((reminder, index) => {
                 const item = document.createElement('div');
                 item.className = 'item';
-
                 const img = document.createElement('img');
                 img.src = images[index % images.length];
                 img.alt = reminder.medicationName;
-
                 const p = document.createElement('p');
                 p.textContent = reminder.medicationName;
-
                 item.appendChild(img);
                 item.appendChild(p);
-
                 medicationContainer.appendChild(item);
             });
         }
-
-        // Función para borrar la cache (localStorage) y recargar la página
         function clearCache() {
             localStorage.removeItem('reminders');
             location.reload();

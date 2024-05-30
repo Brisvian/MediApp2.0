@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,39 +12,32 @@
             background-color: #f0f0f0;
             color: black;
         }
-
         .reminder {
             background-color: #6fb1c8;
             padding: 20px;
             margin: 20px;
             border-radius: 8px;
         }
-
         .reminder h2 {
             margin-top: 0;
             color: white;
             text-align: center;
         }
-
         form {
             display: flex;
             flex-direction: column;
         }
-
         label {
             color: black;
             margin-top: 10px;
             font-weight: 900;
         }
-
-        select,
-        input {
+        select, input {
             margin-top: 5px;
             padding: 5px;
             border-radius: 4px;
             border: 1px solid #ccc;
         }
-
         button[type="submit"] {
             background-color: #293b5f;
             color: white;
@@ -56,13 +48,11 @@
             margin-top: 20px;
             font-weight: 900;
         }
-
         .bottom-menu {
             display: flex;
             justify-content: space-around;
             margin-top: 20px;
         }
-
         .bottom-menu a {
             text-decoration: none;
             color: black;
@@ -70,19 +60,15 @@
             flex-direction: column;
             align-items: center;
         }
-
         .bottom-menu a:hover {
             text-decoration: underline;
         }
-
         .bottom-menu a i {
             margin-bottom: 5px;
         }
-
         .bottom-menu a p {
             margin: 0;
         }
-
         .bottom-menu a .word {
             display: flex;
             flex-direction: column;
@@ -91,30 +77,22 @@
         }
     </style>
 </head>
-
 <body>
     <div class="reminder">
         <h2>Notificaciones</h2>
         <form id="reminder-form">
             <label for="medication-name">Nombre del Medicamento:</label>
             <input type="text" id="medication-name" required>
+
             <label for="dose-time">Hora de la Dosis:</label>
             <input type="time" id="dose-time" required>
-            <label for="regularity">Regularidad:</label>
-            <select id="regularity" onchange="toggleOtherRegularity()" required>
-                <option value="diario">Diario</option>
-                <option value="otro">Otro</option>
-            </select>
-            <div id="other-regularity-container" style="display: none;">
-                <label for="other-regularity">Especificar Regularidad (días):</label>
-                <input type="number" id="other-regularity" min="1">
-            </div>
-            <label for="units">Unidades por Dosis:</label>
-            <input type="number" id="units" required min="1">
+
             <label for="start-date">Fecha de Inicio:</label>
             <input type="date" id="start-date" required>
+
             <label for="end-date">Fecha de Fin:</label>
             <input type="date" id="end-date" required>
+
             <button type="submit">GUARDAR</button>
         </form>
     </div>
@@ -139,68 +117,77 @@
         </a>
     </div>
 
+    <!-- Agrega el audio para la notificación -->
+    <audio id="success-sound" src="notificacion.mp3" preload="auto"></audio>
+
+    <!-- Agrega el script de la API de Google Calendar -->
+    <script src="https://apis.google.com/js/api.js"></script>
     <script>
-        // Función para obtener la hora de la dosis del medicamento desde el almacenamiento local
-        function obtenerHoraDosis() {
-            // Recuperar la hora de la dosis del medicamento desde el almacenamiento local
-            var horaDosis = localStorage.getItem('doseTime');
+        gapi.load('client', initClient);
 
-            // Verificar si la hora de la dosis está almacenada
-            if (horaDosis) {
-                // Devolver la hora de la dosis como cadena
-                return horaDosis;
-            } else {
-                // Si la hora de la dosis no está almacenada, devuelve una cadena vacía
-                return '';
-            }
+        function initClient() {
+            gapi.client.init({
+                apiKey: 'AIzaSyD1YdEpyE09LJEkcU3YRf_lTXglxkKXweA',
+                clientId: '239778569936-7duen33o4h51sn93vqb5gdfmkt06e13f.apps.googleusercontent.com',
+                discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
+                scope: 'https://www.googleapis.com/auth/calendar.events'
+            }).then(function() {
+                // No es necesario crear el evento aquí, se creará al enviar el formulario
+            });
         }
 
-        // Función para guardar la hora de la dosis del medicamento en el almacenamiento local
-        function guardarHoraDosis(hora) {
-            // Guardar la hora de la dosis en el almacenamiento local
-            localStorage.setItem('doseTime', hora);
+        function createEvent(summary, startDateTime, endDateTime) {
+            var event = {
+                'summary': summary,
+                'start': {
+                    'dateTime': startDateTime,
+                    'timeZone': 'America/Los_Angeles'
+                },
+                'end': {
+                    'dateTime': endDateTime,
+                    'timeZone': 'America/Los_Angeles'
+                }
+            };
+
+            var request = gapi.client.calendar.events.insert({
+                'calendarId': 'primary',
+                'resource': event
+            });
+
+            request.execute(function(event) {
+                console.log('Evento creado: ' + event.htmlLink);
+            });
         }
 
-        // Función para mostrar u ocultar el campo de regularidad personalizada
-        function toggleOtherRegularity() {
-            var regularitySelect = document.getElementById('regularity');
-            var otherRegularityContainer = document.getElementById('other-regularity-container');
+        // Manejo del envío del formulario
+        document.getElementById('reminder-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Obtener valores del formulario
+            const medicationName = document.getElementById('medication-name').value;
+            const doseTime = document.getElementById('dose-time').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
 
-            if (regularitySelect.value === 'otro') {
-                otherRegularityContainer.style.display = 'block';
-            } else {
-                otherRegularityContainer.style.display = 'none';
-            }
-        }
+            // Crear fecha y hora de inicio y fin para el evento del calendario
+            const startDateTime = new Date(`${startDate}T${doseTime}`).toISOString();
+            const endDateTime = new Date(`${endDate}T${doseTime}`).toISOString();
 
-        // Función para manejar el envío del formulario
-        document.getElementById('reminder-form').addEventListener('submit', function (event) {
-            event.preventDefault(); // Evitar que el formulario se envíe
+            // Llamar a la función para crear el evento en el calendario
+            createEvent(medicationName, startDateTime, endDateTime);
 
-            // Obtener los valores del formulario
-            var medicationName = document.getElementById('medication-name').value;
-            var doseTime = document.getElementById('dose-time').value;
-            var regularity = document.getElementById('regularity').value;
-            var units = document.getElementById('units').value;
-            var startDate = document.getElementById('start-date').value;
-            var endDate = document.getElementById('end-date').value;
+            // Resto del código para guardar la notificación localmente y mostrar alerta, etc.
+            
+            // Guardar en localStorage, reproducir sonido de éxito, y redirigir
+            var audio = document.getElementById('success-sound');
+            audio.play();
 
-            // Guardar la hora de la dosis en el almacenamiento local
-            guardarHoraDosis(doseTime);
-
-            // Aquí puedes implementar el código para enviar los datos al servidor o realizar otras acciones necesarias
-            console.log('Datos del formulario:');
-            console.log('Nombre del medicamento:', medicationName);
-            console.log('Hora de la dosis:', doseTime);
-            console.log('Regularidad:', regularity);
-            console.log('Unidades por dosis:', units);
-            console.log('Fecha de inicio:', startDate);
-            console.log('Fecha de fin:', endDate);
-
-            // Reiniciar el formulario
-            this.reset();
+            // Mostrar alerta y redirigir después de 1 segundo
+            alert('Recordatorio guardado exitosamente');
+            setTimeout(function() {
+                window.location.href = "lista_record.html";
+            }, 3000); // Espera 1 segundo antes de redirigir
         });
     </script>
 </body>
-
 </html>
