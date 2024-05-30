@@ -93,8 +93,6 @@
                 <option value="diario">Diariamente</option>
                 <option value="semanal">Semanal</option>
                 <option value="mensual">Mensual</option>
-                
-                
             </select>
 
             <label for="other-regularity" id="other-label" style="display: none;">Días:</label>
@@ -113,11 +111,13 @@
         </form>
 
         <div class="bottom-menu">
-            <a href="lista_record.html"><div class="word"><p>    Lista de recordatorios</p></div></a>
-            <a href="index.html"><div class="word"><p>    Agregar medicamento</p></div></a>
+            <a href="lista_record.html"><div class="word"><p>Lista de recordatorios</p></div></a>
+            <a href="index.html"><div class="word"><p>Agregar medicamento</p></div></a>
             <a href="historial.html"><i class="fas fa-history"></i><div class="word"><p>Historial</p></div></a>
         </div>
     </div>
+
+    <audio id="success-sound" src="path/to/your/success-sound.mp3" preload="auto"></audio>
 
     <script>
         // Función para mostrar/ocultar el campo "Otro" en la regularidad
@@ -193,8 +193,16 @@
             }
             // Guardar en localStorage
             localStorage.setItem('reminders', JSON.stringify(reminders));
+
+            // Reproducir sonido de éxito
+            var audio = document.getElementById('success-sound');
+            audio.play();
+
+            // Mostrar alerta y redirigir después de 1 segundo
             alert('Recordatorio guardado exitosamente');
-            window.location.href = "lista_record.html"; // Redirige a la página de lista de recordatorios
+            setTimeout(function() {
+                window.location.href = "lista_record.html";
+            }, 5000); // Espera 1 segundo antes de redirigir
         });
 
         // Cargar datos del recordatorio si está en modo edición

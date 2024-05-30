@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://apis.google.com/js/api.js"></script>
-    <meta name="google-signin-client_id" content="239778569936-gl0h772bvngls0qkqsl0g13441uk8ajq.apps.googleusercontent.com">
     <title>Notificaciones</title>
     <style>
         body {
@@ -14,32 +13,39 @@
             background-color: #f0f0f0;
             color: black;
         }
+
         .reminder {
             background-color: #6fb1c8;
             padding: 20px;
             margin: 20px;
             border-radius: 8px;
         }
+
         .reminder h2 {
             margin-top: 0;
             color: white;
             text-align: center;
         }
+
         form {
             display: flex;
             flex-direction: column;
         }
+
         label {
             color: black;
             margin-top: 10px;
             font-weight: 900;
         }
-        select, input {
+
+        select,
+        input {
             margin-top: 5px;
             padding: 5px;
             border-radius: 4px;
             border: 1px solid #ccc;
         }
+
         button[type="submit"] {
             background-color: #293b5f;
             color: white;
@@ -50,11 +56,13 @@
             margin-top: 20px;
             font-weight: 900;
         }
+
         .bottom-menu {
             display: flex;
             justify-content: space-around;
             margin-top: 20px;
         }
+
         .bottom-menu a {
             text-decoration: none;
             color: black;
@@ -62,108 +70,28 @@
             flex-direction: column;
             align-items: center;
         }
+
         .bottom-menu a:hover {
             text-decoration: underline;
         }
+
         .bottom-menu a i {
             margin-bottom: 5px;
         }
+
         .bottom-menu a p {
             margin: 0;
         }
+
         .bottom-menu a .word {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-
-        /* Estilos para la notificación personalizada */
-        .notification-container {
-            background-color: #82A9AB;
-            width: 300px;
-            height: 500px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-        }
-        .notification-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-        .notification-header img {
-            margin-right: 10px;
-        }
-        .notification-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .notification-date {
-            font-size: 14px;
-            margin-bottom: -90px;
-            text-align: left;
-            color: #000;
-        }
-        .medication-info {
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            color: #000;
-            text-align: left;
-        }
-        .take-button {
-            background-color: #3b4a60;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .footer {
-            margin-top: 20px;
-            font-size: 12px;
-        }
-        .footer img {
-            cursor: pointer;
-        }
-
-        /* Estilos para el fondo oscuro del modal */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
     </style>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(function(registration) {
-                        console.log('Service Worker registrado con éxito:', registration.scope);
-                    }, function(err) {
-                        console.error('Error al registrar el Service Worker:', err);
-                    });
-            });
-        }
-    </script>
 </head>
+
 <body>
     <div class="reminder">
         <h2>Notificaciones</h2>
@@ -210,5 +138,69 @@
             </div>
         </a>
     </div>
+
+    <script>
+        // Función para obtener la hora de la dosis del medicamento desde el almacenamiento local
+        function obtenerHoraDosis() {
+            // Recuperar la hora de la dosis del medicamento desde el almacenamiento local
+            var horaDosis = localStorage.getItem('doseTime');
+
+            // Verificar si la hora de la dosis está almacenada
+            if (horaDosis) {
+                // Devolver la hora de la dosis como cadena
+                return horaDosis;
+            } else {
+                // Si la hora de la dosis no está almacenada, devuelve una cadena vacía
+                return '';
+            }
+        }
+
+        // Función para guardar la hora de la dosis del medicamento en el almacenamiento local
+        function guardarHoraDosis(hora) {
+            // Guardar la hora de la dosis en el almacenamiento local
+            localStorage.setItem('doseTime', hora);
+        }
+
+        // Función para mostrar u ocultar el campo de regularidad personalizada
+        function toggleOtherRegularity() {
+            var regularitySelect = document.getElementById('regularity');
+            var otherRegularityContainer = document.getElementById('other-regularity-container');
+
+            if (regularitySelect.value === 'otro') {
+                otherRegularityContainer.style.display = 'block';
+            } else {
+                otherRegularityContainer.style.display = 'none';
+            }
+        }
+
+        // Función para manejar el envío del formulario
+        document.getElementById('reminder-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Evitar que el formulario se envíe
+
+            // Obtener los valores del formulario
+            var medicationName = document.getElementById('medication-name').value;
+            var doseTime = document.getElementById('dose-time').value;
+            var regularity = document.getElementById('regularity').value;
+            var units = document.getElementById('units').value;
+            var startDate = document.getElementById('start-date').value;
+            var endDate = document.getElementById('end-date').value;
+
+            // Guardar la hora de la dosis en el almacenamiento local
+            guardarHoraDosis(doseTime);
+
+            // Aquí puedes implementar el código para enviar los datos al servidor o realizar otras acciones necesarias
+            console.log('Datos del formulario:');
+            console.log('Nombre del medicamento:', medicationName);
+            console.log('Hora de la dosis:', doseTime);
+            console.log('Regularidad:', regularity);
+            console.log('Unidades por dosis:', units);
+            console.log('Fecha de inicio:', startDate);
+            console.log('Fecha de fin:', endDate);
+
+            // Reiniciar el formulario
+            this.reset();
+        });
+    </script>
 </body>
+
 </html>
