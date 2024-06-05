@@ -98,9 +98,10 @@
     <div id="ldrMessage">Cargando estado del sensor..</div>
 
     <script>
-        // Función para obtener y mostrar el estado del LDR
+        // Función para obtener y mostrar el estado del LDR desde el ESP32
         function updateLDRMessage() {
-            fetch('/ldr')
+            // Reemplaza '192.168.1.74' con la dirección IP de tu ESP32
+            fetch('http://192.168.1.80/ldr')
                 .then(response => response.text())
                 .then(data => {
                     // Actualizar el contenido del div con id ldrMessage
@@ -112,8 +113,11 @@
                 });
         }
 
-        // Llamar a la función para obtener y mostrar el estado del LDR cuando se carga la página
+        // Llamar a la función para obtener y mostrar el estado del LDR inicialmente
         updateLDRMessage();
+
+        // Llamar a la función para obtener y mostrar el estado del LDR cada 3 segundos
+        setInterval(updateLDRMessage, 3000);
     </script>
 </body>
 </html>
