@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -72,6 +71,17 @@
             width: 24px;
             height: 24px;
         }
+        /* Añadir estilos para el mensaje del LDR */
+        #ldrMessage {
+            background-color: white;
+            color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
     </style>
 </head>
 <body>
@@ -81,17 +91,29 @@
     </div>
   
     <div class="navbar">
-    
+        <!-- Aquí se pueden añadir enlaces de navegación -->
     </div>
+    
+    <!-- Contenedor para el mensaje del LDR -->
+    <div id="ldrMessage">Cargando estado del sensor...</div>
+
     <script>
-      fetch('/ldr')
-          .then(response => response.text())
-          .then(data => {
-              // Actualizar la interfaz con el mensaje recibido
-              console.log(data); // Para depuración, puedes cambiar esto para actualizar tu interfaz HTML
-          })
-          .catch(error => console.error('Error:', error));
-  </script>
-  
+        // Función para obtener y mostrar el estado del LDR
+        function updateLDRMessage() {
+            fetch('/ldr')
+                .then(response => response.text())
+                .then(data => {
+                    // Actualizar el contenido del div con id ldrMessage
+                    document.getElementById('ldrMessage').innerText = data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('ldrMessage').innerText = 'Error al obtener el estado del sensor.';
+                });
+        }
+
+        // Llamar a la función para obtener y mostrar el estado del LDR cuando se carga la página
+        updateLDRMessage();
+    </script>
 </body>
 </html>
