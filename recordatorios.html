@@ -76,6 +76,23 @@
             align-items: center;
             justify-content: center;
         }
+        .input-link-wrapper {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        .input-link-wrapper a {
+            text-align: left;
+            color: #000000;
+            text-decoration: none;
+            flex-grow: 1;
+            width: 100%;
+            font-family: Arial, sans-serif; /* Ajuste del tipo de letra */
+        }
     </style>
 </head>
 <body>
@@ -86,16 +103,19 @@
             <input type="text" id="medication-name" required>
 
             <label for="dose-time">Hora de la Dosis:</label>
+            <div class="input-link-wrapper">
+                <a href="https://www.my-alarm-clock.com/es/" target="_blank">hora: </a>
+            </div>
             <input type="time" id="dose-time" required>
 
             <label for="regularity">Regularidad:</label>
             <select id="regularity" onchange="toggleOtherInput()">
                 <option value="diario">Diariamente</option>
-                <option value="semanal">Semanal</option>
+                <option value="cada_x_horas">Horas</option>
                 <option value="mensual">Mensual</option>
             </select>
 
-            <label for="other-regularity" id="other-label" style="display: none;">Días:</label>
+            <label for="other-regularity" id="other-label" style="display: none;">Horas:</label>
             <input type="number" id="other-regularity" style="display: none;" min="1">
 
             <label for="units">Unidades:</label>
@@ -117,15 +137,13 @@
         </div>
     </div>
 
-    <audio id="success-sound" src="path/to/your/success-sound.mp3" preload="auto"></audio>
-
     <script>
         // Función para mostrar/ocultar el campo "Otro" en la regularidad
         function toggleOtherInput() {
             const regularitySelect = document.getElementById('regularity');
             const otherInput = document.getElementById('other-regularity');
             const otherLabel = document.getElementById('other-label');
-            if (regularitySelect.value === 'otro') {
+            if (regularitySelect.value === 'cada_x_horas') {
                 otherInput.style.display = 'block';
                 otherLabel.style.display = 'block';
             } else {
@@ -142,11 +160,11 @@
                 const reminder = reminders[editIndex];
                 document.getElementById('medication-name').value = reminder.medicationName;
                 document.getElementById('dose-time').value = reminder.doseTime;
-                document.getElementById('regularity').value = reminder.regularity.includes('días') ? 'otro' : reminder.regularity;
+                document.getElementById('regularity').value = reminder.regularity.includes('horas') ? 'cada_x_horas' : reminder.regularity;
                 document.getElementById('units').value = reminder.units;
                 document.getElementById('start-date').value = reminder.startDate;
                 document.getElementById('end-date').value = reminder.endDate;
-                if (reminder.regularity.includes('días')) {
+                if (reminder.regularity.includes('horas')) {
                     document.getElementById('other-regularity').value = reminder.regularity.split(' ')[0];
                     toggleOtherInput();
                 }
@@ -165,20 +183,11 @@
             const endDate = document.getElementById('end-date').value;
             let actualRegularity = regularity;
 
-            // Si la regularidad es "Otro", obtiene el valor de días especificado
-            if (regularity === 'otro') {
-                actualRegularity = document.getElementById('other-regularity').value + ' días';
+            // Si la regularidad es "Cada X horas", obtiene el valor de horas especificado
+            if (regularity === 'cada_x_horas') {
+                actualRegularity = document.getElementById('other-regularity').value + ' horas';
             }
 
-            // Crea el objeto recordatorio
-            const reminder = {
-                medicationName,
-                doseTime,
-                regularity: actualRegularity,
-                units,
-                startDate,
-                endDate
-            };
 
             // Recupera los recordatorios almacenados
             let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
@@ -194,15 +203,11 @@
             // Guardar en localStorage
             localStorage.setItem('reminders', JSON.stringify(reminders));
 
-            // Reproducir sonido de éxito
-            var audio = document.getElementById('success-sound');
-            audio.play();
-
             // Mostrar alerta y redirigir después de 1 segundo
             alert('Recordatorio guardado exitosamente');
             setTimeout(function() {
                 window.location.href = "lista_record.html";
-            }, 5000); // Espera 1 segundo antes de redirigir
+            }, 500); // Espera 1 segundo antes de redirigir
         });
 
         // Cargar datos del recordatorio si está en modo edición
