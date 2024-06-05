@@ -106,8 +106,9 @@
             <div class="input-link-wrapper">
                 <a href="https://www.my-alarm-clock.com/es/" target="_blank">hora: </a>
             </div>
+            
+            <label for="regularity">Confirme la hora:</label>
             <input type="time" id="dose-time" required>
-
             <label for="regularity">Regularidad:</label>
             <select id="regularity" onchange="toggleOtherInput()">
                 <option value="diario">Diariamente</option>
@@ -171,44 +172,53 @@
             }
         }
 
-        // Manejo del envío del formulario
-        document.getElementById('reminder-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const medicationName = document.getElementById('medication-name').value;
-            const doseTime = document.getElementById('dose-time').value;
-            const regularity = document.getElementById('regularity').value;
-            const units = document.getElementById('units').value;
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
-            let actualRegularity = regularity;
+       // Manejo del envío del formulario
+document.getElementById('reminder-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    const medicationName = document.getElementById('medication-name').value;
+    const doseTime = document.getElementById('dose-time').value;
+    const regularity = document.getElementById('regularity').value;
+    const units = document.getElementById('units').value;
+    const startDate = document.getElementById('start-date').value;
+    const endDate = document.getElementById('end-date').value;
+    let actualRegularity = regularity;
 
-            // Si la regularidad es "Cada X horas", obtiene el valor de horas especificado
-            if (regularity === 'cada_x_horas') {
-                actualRegularity = document.getElementById('other-regularity').value + ' horas';
-            }
+    // Si la regularidad es "Cada X horas", obtiene el valor de horas especificado
+    if (regularity === 'cada_x_horas') {
+        actualRegularity = document.getElementById('other-regularity').value + ' horas';
+    }
 
+    // Crear el objeto reminder
+    const reminder = {
+        medicationName: medicationName,
+        doseTime: doseTime,
+        regularity: actualRegularity,
+        units: units,
+        startDate: startDate,
+        endDate: endDate
+    };
 
-            // Recupera los recordatorios almacenados
-            let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
-            const editIndex = localStorage.getItem('editIndex');
-            if (editIndex !== null) {
-                // Editar el recordatorio existente
-                reminders[editIndex] = reminder;
-                localStorage.removeItem('editIndex'); // Elimina el índice de edición del localStorage
-            } else {
-                // Añadir un nuevo recordatorio
-                reminders.push(reminder);
-            }
-            // Guardar en localStorage
-            localStorage.setItem('reminders', JSON.stringify(reminders));
+    // Recupera los recordatorios almacenados
+    let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+    const editIndex = localStorage.getItem('editIndex');
+    if (editIndex !== null) {
+        // Editar el recordatorio existente
+        reminders[editIndex] = reminder;
+        localStorage.removeItem('editIndex'); // Elimina el índice de edición del localStorage
+    } else {
+        // Añadir un nuevo recordatorio
+        reminders.push(reminder);
+    }
+    // Guardar en localStorage
+    localStorage.setItem('reminders', JSON.stringify(reminders));
 
-            // Mostrar alerta y redirigir después de 1 segundo
-            alert('Recordatorio guardado exitosamente');
-            setTimeout(function() {
-                window.location.href = "lista_record.html";
-            }, 500); // Espera 1 segundo antes de redirigir
-        });
+    // Mostrar alerta y redirigir después de 1 segundo
+    alert('Recordatorio guardado exitosamente');
+    setTimeout(function() {
+        window.location.href = "lista_record.html";
+    }, 500); // Espera 1 segundo antes de redirigir
+});
 
         // Cargar datos del recordatorio si está en modo edición
         cargarDatosRecordatorio();
