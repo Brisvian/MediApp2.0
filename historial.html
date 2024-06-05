@@ -83,5 +83,15 @@
     <div class="navbar">
     
     </div>
+    <script>
+      fetch('/ldr')
+          .then(response => response.text())
+          .then(data => {
+              // Actualizar la interfaz con el mensaje recibido
+              console.log(data); // Para depuración, puedes cambiar esto para actualizar tu interfaz HTML
+          })
+          .catch(error => console.error('Error:', error));
+  </script>
+  
 </body>
 </html>
