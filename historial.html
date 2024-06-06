@@ -100,7 +100,7 @@
     <script>
         const THINGSPEAK_CHANNEL_ID = '2570627';
         const THINGSPEAK_READ_API_KEY = '1R4KBDTX4DHO1IWO';
-        const THINGSPEAK_URL = 'https://api.thingspeak.com/channels/${THINGSPEAK_CHANNEL_ID}/feeds.json?api_key=${THINGSPEAK_READ_API_KEY}&results=1';
+        const THINGSPEAK_URL = `https://api.thingspeak.com/channels/${THINGSPEAK_CHANNEL_ID}/feeds.json?api_key=${THINGSPEAK_READ_API_KEY}&results=1`;
 
         // Función para obtener y mostrar el estado del LDR desde ThingSpeak
         function updateLDRMessage() {
