@@ -12,12 +12,20 @@
             padding: 0;
             background-color: #f0f0f0;
             color: black;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: space-between;
+            align-items: center;
         }
         .reminder {
             background-color: #6fb1c8;
             padding: 20px;
             margin: 20px;
             border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
         }
         .reminder h2 {
             margin-top: 0;
@@ -50,31 +58,22 @@
             font-weight: 900;
         }
         .bottom-menu {
+            width: 100%;
+            background-color: white;
+            padding: 10px;
             display: flex;
             justify-content: space-around;
-            margin-top: 20px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
         }
         .bottom-menu a {
             text-decoration: none;
-            color: black;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            color: #000000;
+            font-size: 14px;
+            text-align: center;
         }
-        .bottom-menu a:hover {
-            text-decoration: underline;
-        }
-        .bottom-menu a i {
-            margin-bottom: 5px;
-        }
-        .bottom-menu a p {
-            margin: 0;
-        }
-        .bottom-menu a .word {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        .bottom-menu a img {
+            width: 24px;
+            height: 24px;
         }
         .input-link-wrapper {
             display: flex;
@@ -107,8 +106,9 @@
                 <a href="https://www.my-alarm-clock.com/es/" target="_blank">hora: </a>
             </div>
             
-            <label for="regularity">Confirme la hora:</label>
+            <label for="dose-time">Confirme la hora:</label>
             <input type="time" id="dose-time" required>
+            
             <label for="regularity">Regularidad:</label>
             <select id="regularity" onchange="toggleOtherInput()">
                 <option value="diario">Diariamente</option>
@@ -130,12 +130,21 @@
 
             <button type="submit"><i class="fas fa-save"></i> GUARDAR</button>
         </form>
+    </div>
 
-        <div class="bottom-menu">
-            <a href="lista_record.html"><div class="word"><p>Lista de recordatorios</p></div></a>
-            <a href="index.html"><div class="word"><p>Agregar medicamento</p></div></a>
-            <a href="historial.html"><i class="fas fa-history"></i><div class="word"><p>Historial</p></div></a>
-        </div>
+    <div class="bottom-menu">
+        <a href="lista_record.html">
+            <img src="imagenes/recordatorio.png" alt="Lista de recordatorios">
+            <p>Lista de recordatorios</p>
+        </a>
+        <a href="registrar.html">
+            <img src="imagenes/medicamento.png" alt="Agregar medicamento">
+            <p>Agregar medicamento</p>
+        </a>
+        <a href="historial.html">
+            <img src="imagenes/historialm.png" alt="Historial">
+            <p>Historial</p>
+        </a>
     </div>
 
     <script>
@@ -172,53 +181,53 @@
             }
         }
 
-       // Manejo del envío del formulario
-document.getElementById('reminder-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const medicationName = document.getElementById('medication-name').value;
-    const doseTime = document.getElementById('dose-time').value;
-    const regularity = document.getElementById('regularity').value;
-    const units = document.getElementById('units').value;
-    const startDate = document.getElementById('start-date').value;
-    const endDate = document.getElementById('end-date').value;
-    let actualRegularity = regularity;
+        // Manejo del envío del formulario
+        document.getElementById('reminder-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const medicationName = document.getElementById('medication-name').value;
+            const doseTime = document.getElementById('dose-time').value;
+            const regularity = document.getElementById('regularity').value;
+            const units = document.getElementById('units').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            let actualRegularity = regularity;
 
-    // Si la regularidad es "Cada X horas", obtiene el valor de horas especificado
-    if (regularity === 'cada_x_horas') {
-        actualRegularity = document.getElementById('other-regularity').value + ' horas';
-    }
+            // Si la regularidad es "Cada X horas", obtiene el valor de horas especificado
+            if (regularity === 'cada_x_horas') {
+                actualRegularity = document.getElementById('other-regularity').value + ' horas';
+            }
 
-    // Crear el objeto reminder
-    const reminder = {
-        medicationName: medicationName,
-        doseTime: doseTime,
-        regularity: actualRegularity,
-        units: units,
-        startDate: startDate,
-        endDate: endDate
-    };
+            // Crear el objeto reminder
+            const reminder = {
+                medicationName: medicationName,
+                doseTime: doseTime,
+                regularity: actualRegularity,
+                units: units,
+                startDate: startDate,
+                endDate: endDate
+            };
 
-    // Recupera los recordatorios almacenados
-    let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
-    const editIndex = localStorage.getItem('editIndex');
-    if (editIndex !== null) {
-        // Editar el recordatorio existente
-        reminders[editIndex] = reminder;
-        localStorage.removeItem('editIndex'); // Elimina el índice de edición del localStorage
-    } else {
-        // Añadir un nuevo recordatorio
-        reminders.push(reminder);
-    }
-    // Guardar en localStorage
-    localStorage.setItem('reminders', JSON.stringify(reminders));
+            // Recupera los recordatorios almacenados
+            let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+            const editIndex = localStorage.getItem('editIndex');
+            if (editIndex !== null) {
+                // Editar el recordatorio existente
+                reminders[editIndex] = reminder;
+                localStorage.removeItem('editIndex'); // Elimina el índice de edición del localStorage
+            } else {
+                // Añadir un nuevo recordatorio
+                reminders.push(reminder);
+            }
+            // Guardar en localStorage
+            localStorage.setItem('reminders', JSON.stringify(reminders));
 
-    // Mostrar alerta y redirigir después de 1 segundo
-    alert('Recordatorio guardado exitosamente');
-    setTimeout(function() {
-        window.location.href = "lista_record.html";
-    }, 500); // Espera 1 segundo antes de redirigir
-});
+            // Mostrar alerta y redirigir después de 1 segundo
+            alert('Recordatorio guardado exitosamente');
+            setTimeout(function() {
+                window.location.href = "lista_record.html";
+            }, 500); // Espera 1 segundo antes de redirigir
+        });
 
         // Cargar datos del recordatorio si está en modo edición
         cargarDatosRecordatorio();

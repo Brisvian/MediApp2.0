@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Medicamento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6da1a6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        @media(min-width: 600px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .item {
+            background-color: white;
+            border: 2px dashed #333;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .item img {
+            width: 40px;
+            height: 40px;
+        }
+        .item p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #333;
+        }
+        .navbar {
+            width: 100%;
+            background-color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            text-decoration: none;
+            color: #000000;
+            font-size: 14px;
+            text-align: center;
+        }
+        .navbar a img {
+            width: 24px;
+            height: 24px;
+        }
+        h2 {
+            margin-top: -10px;
+            margin-left: 30px;
+        }
+        .icono-arriba {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        .clear-cache-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <img src="imagenes/medicamento.png" class="icono-arriba" width="100">
+    <h2>Agregar medicamento</h2>
+    <div class="container" id="medication-container">
+        <div class="item">
+            <a href="recordatorios.html">
+                <img src="imagenes/botonmas.png" alt="Agregar">
+            </a>
+        </div>
+    </div>
+    <button class="clear-cache-button" onclick="clearCache()">Borrar medicamentos</button>
+    <div class="navbar">
+        <a href="lista_record.html">
+            <img src="imagenes/recordatorio.png" alt="Lista de recordatorios">
+            <p>Lista de recordatorios</p>
+        </a>
+        <a href="historial.html">
+            <img src="imagenes/historialm.png" alt="Historial">
+            <p>Historial</p>
+        </a>
+    </div>
+    <script>
+        const images = [
+            'imagenes/pastilla1.png',
+            'imagenes/pastilla2.png',
+            'imagenes/pastilla3.png',
+            'imagenes/pastilla4.png',
+            'imagenes/fotomedicamento.png'
+        ];
+        window.onload = function() {
+            const medicationContainer = document.getElementById('medication-container');
+            let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+            reminders.forEach((reminder, index) => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                const img = document.createElement('img');
+                img.src = images[index % images.length];
+                img.alt = reminder.medicationName;
+                const p = document.createElement('p');
+                p.textContent = reminder.medicationName;
+                item.appendChild(img);
+                item.appendChild(p);
+                medicationContainer.appendChild(item);
+            });
+        }
+        function clearCache() {
+            localStorage.removeItem('reminders');
+            location.reload();
+        }
+    </script>
+</body>
+</html>

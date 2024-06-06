@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediAPP</title>
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            height: 100vh;
+            margin: 0;
+            background-color: #e0f7fa;
+        }
+        .container {
+            background-color: #47a2a5;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 90%;
+            text-align: center;
+            padding: 10px;
+            margin: 0 auto;
+        }
+        .container h1 {
+            margin: -90px 0 0 20px;
+            color: #000000;
+        }
+        .container h2 {
+            margin: 60px 0 0 0px;
+            color: #000000;
+        }
+        .container img {
+            width: 50%;
+            max-width: 100px;
+            margin-bottom: 100px;
+        }
+        .button {
+            background-color: #0a144bc0;
+            color: white;
+            padding: 15px 20px;
+            margin: 90px 0;
+            border: none;
+            border-radius: 17px;
+            width: 98%;
+            font-size: 4vw;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .button img {
+            margin-right: 50px;
+            margin-left: 20px;
+            margin-bottom: 0px;
+            width: 10px;
+        }
+        @media (max-width: 600px) {
+            .container img {
+                width: 30%;
+            }
+            .button {
+                padding: 10px 15px;
+                font-size: 6vw;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="imagenes/logo.png">
+        <h1>MediAPP</h1>
+        
+        <button class="button" onclick="window.location.href='registrar.html'">
+            <img src="imagenes/agregarmedicamento.png">
+            <span style="margin-left: -40px;">Registrar medicamento</span>
+        </button>
+        <button class="button" onclick="window.location.href='historial.html'">
+            <img src="imagenes/historial.png" style="margin-right: 0px; margin-left: 3px;">
+            <span style="margin-left: 60px;">Historial</span>
+        </button>
+    </div>
+</body>
+</html>

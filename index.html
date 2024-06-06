@@ -3,140 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Medicamento</title>
+    <title>Iniciar Sesion como</title>
     <style>
+        /* Estilos para el cuerpo de la página */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #6da1a6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            justify-content: space-between;
-            align-items: center;
+            font-family: "Roboto", sans-serif; /* Cambia la fuente */
+            height: 100vh; /* Altura de la ventana del navegador */
+            margin: 0; /* Elimina el margen predeterminado */
+            background-color: #e0f7fa; /* Color de fondo de la página */
         }
+
+        /* Contenedor principal */
         .container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            padding: 20px;
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box;
+            background-color: #47a2a5; /* Color de fondo del contenedor */
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra del contenedor */
+            width: 90%; /* Ancho del contenedor */
+            max-width: 90%; /* Ancho máximo del contenedor */
+            text-align: center; /* Texto centrado */
+            padding: 10px; /* Espacio interior */
+            margin: 0 auto; /* Centrar horizontalmente */
         }
-        @media(min-width: 600px) {
-            .container {
-                grid-template-columns: repeat(2, 1fr);
+
+        /* Estilos para el título principal */
+        .container h1 {
+            margin: 30px 0 0 20px; /* Ajusta la posición vertical y horizontal del título */
+            color: #000000; /* Color del texto */
+        }
+        .container h2 {
+            margin: 150px 0 0 20px; /* Ajusta la posición vertical y horizontal del título */
+            color: #000000; /* Color del texto */
+        }
+
+        /* Estilos para la imagen del logo */
+        .container img {
+            width: 50%; /* Ancho de la imagen */
+            max-width: 100px; /* Ancho máximo de la imagen */
+            margin-bottom: -150px; /* Margen inferior */
+        }
+
+        /* Estilos para los botones */
+        .button {
+            background-color: #0a144bc0; /* Color de fondo del botón */
+            color: white; /* Color del texto */
+            padding: 15px 20px; /* Espacio interior del botón */
+            margin: 60px 0 30px; /* Margen superior, inferior y ancho */
+            border: none; /* Sin borde */
+            border-radius: 17px; /* Bordes redondeados */
+            width: 98%; /* Ancho completo del contenedor */
+            font-size: 4vw; /* Tamaño de la fuente en unidades relativas */
+            font-weight: bold; /* Texto en negrita */
+            cursor: pointer; /* Cursor en forma de mano al pasar por el botón */
+            text-align: center; /* Texto centrado */
+            display: flex; /* Usa flexbox para centrar el contenido verticalmente */
+            align-items: center; /* Centra verticalmente */
+            justify-content: flex-start; /* Alinea la imagen al lado izquierdo */
+        }
+
+        /* Estilos para las imágenes dentro de los botones */
+        .button img {
+            margin-right: 50px; /* Espacio a la derecha de la imagen */
+            margin-left: 20px; /* Ajusta la posición de la imagen hacia la izquierda */
+            margin-bottom: 0px; /* Ajusta la posición de la imagen hacia abajo */
+            width: 50px; /* Ancho de la imagen del botón del cuidador */
+        }
+        
+        /* Media queries para dispositivos pequeños */
+        @media (max-width: 600px) {
+            .container img {
+                width: 30%; /* Reducir el tamaño de la imagen del logo en dispositivos pequeños */
             }
-        }
-        .item {
-            background-color: white;
-            border: 2px dashed #333;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .item img {
-            width: 40px;
-            height: 40px;
-        }
-        .item p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            color: #333;
-        }
-        .navbar {
-            width: 100%;
-            background-color: white;
-            padding: 10px;
-            display: flex;
-            justify-content: space-around;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-        }
-        .navbar a {
-            text-decoration: none;
-            color: #6da1a6;
-            font-size: 14px;
-            text-align: center;
-        }
-        .navbar a img {
-            width: 24px;
-            height: 24px;
-        }
-        h2 {
-            margin-top: -10px;
-            margin-left: 30px;
-        }
-        .icono-arriba img {
-            margin-top: -50px;
-        }
-        .clear-cache-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            .button {
+                padding: 10px 15px; /* Reducir el padding del botón */
+                font-size: 6vw; /* Tamaño de la fuente ajustado para pantallas pequeñas */
+                margin: 30px 0 20px; /* Ajustar la distancia entre botones en dispositivos pequeños */
+            }
         }
     </style>
 </head>
 <body>
-    <img src="imagenes/agregarmedicamento.png" class="icono-arriba" width="100">
-    <h2>Agregar medicamento</h2>
-    <div class="container" id="medication-container">
-        <div class="item">
-            <a href="recordatorios.html">
-                <img src="imagenes/botonmas.png" alt="Agregar">
-            </a>
-        </div>
+    <!-- Contenedor principal -->
+    <div class="container">
+        <!-- Imagen del logo -->
+        <img src="imagenes/logo.png" alt="MediAPP Logo" style="margin-left: 35px;">
+        
+        <!-- Título principal -->
+        <h1>MediAPP</h1>
+        <!-- Subtítulo -->
+        <h2>INICIAR SESIÓN COMO:</h2>
+        <!-- Botón para iniciar sesión como Paciente -->
+        <button class="button" onclick="window.location.href='iniciarsesion.html'">
+            <!-- Imagen del ícono de Paciente -->
+            <img src="imagenes/paciente.png">
+            Paciente
+        </button>
+        <!-- Botón para iniciar sesión como Cuidador -->
+        <button class="button" onclick="window.location.href='iniciarsesioncuida.html'">
+            <!-- Imagen del ícono de Cuidador -->
+            <img src="imagenes/cuidador.png">
+            Cuidador
+        </button>
     </div>
-    <button class="clear-cache-button" onclick="clearCache()">Borrar Cache</button>
-    <div class="navbar">
-        <a href="regcuidador.html">
-            <img src="imagenes/agrecuidador.png" alt="Cuidador">
-            <p>Cuidador</p>
-        </a>
-        <a href="lista_record.html">
-            <img src="imagenes/recordatorio.png" alt="Lista de recordatorios">
-            <p>Lista de recordatorios</p>
-        </a>
-        <a href="historial.html">
-            <img src="imagenes/historialm.png" alt="Historial">
-            <p>Historial</p>
-        </a>
-    </div>
-    <script>
-        const images = [
-            'imagenes/pastilla1.png',
-            'imagenes/pastilla2.png',
-            'imagenes/pastilla3.png',
-            'imagenes/pastilla4.png',
-            'imagenes/fotomedicamento.png'
-        ];
-        window.onload = function() {
-            const medicationContainer = document.getElementById('medication-container');
-            let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
-            reminders.forEach((reminder, index) => {
-                const item = document.createElement('div');
-                item.className = 'item';
-                const img = document.createElement('img');
-                img.src = images[index % images.length];
-                img.alt = reminder.medicationName;
-                const p = document.createElement('p');
-                p.textContent = reminder.medicationName;
-                item.appendChild(img);
-                item.appendChild(p);
-                medicationContainer.appendChild(item);
-            });
-        }
-        function clearCache() {
-            localStorage.removeItem('reminders');
-            location.reload();
-        }
-    </script>
 </body>
 </html>

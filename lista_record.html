@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Recordatorios</title>
     <style>
-        /* Estilos CSS aquí */
-        
         body {
             font-family: Arial, sans-serif;
             background-color: #6da1a6;
@@ -14,29 +12,31 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            justify-content: flex-start;
             align-items: center;
         }
         .header {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 50px; /* Ajustar la distancia desde la parte superior */
+            color: rgb(0, 0, 0);
         }
         .header img {
-            width: 40px;
-            height: 40px;
+            width: 60px; /* Ajustar el tamaño del icono */
+            height: 60px; /* Ajustar el tamaño del icono */
         }
         .header h2 {
             margin: 10px 0;
-            font-size: 24px;
-            color: white;
+            font-size: 24px; /* Ajustar el tamaño del título */
+            color: rgb(5, 5, 5);
         }
         .container {
             width: 90%;
             max-width: 400px;
+            max-height: 250px; /* Ajustar la altura máxima */
             margin-top: 20px;
-            flex-grow: 1;
-            overflow-y: auto; /* Añadido para permitir desplazamiento si es necesario */
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-y: auto;
         }
         .reminder {
             background-color: #f3f3f3;
@@ -54,45 +54,37 @@
         .edit-icon {
             width: 24px;
             height: 24px;
-            cursor: pointer; /* Añadido para indicar que es clicable */
-        }
-        .add-reminder {
-            text-align: center;
-            color: white;
-            font-size: 18px;
-            margin-top: 20px;
-            margin-bottom: 20px; /* Agrega margen inferior */
-        }
-        .add-reminder a {
-            color: white;
-            text-decoration: none;
+            cursor: pointer;
         }
         .navbar {
             width: 100%;
             background-color: white;
             padding: 10px;
             display: flex;
-            justify-content: space-around; /* Alinea los elementos horizontalmente */
+            justify-content: space-around;
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            margin-top: 155px; /* Ajustar el margen superior para mover el menú hacia abajo */
+   
         }
         .navbar a {
             text-decoration: none;
-            color: #6da1a6;
-            font-size: 14px;
+            color: black;
+            font-size: 14px; /* Tamaño original de la fuente del menú */
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .navbar a img {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 5px; /* Agrega margen inferior a los iconos */
+            width: 60px; /* Ajustar el tamaño del icono del menú */
+            height: 60px; /* Ajustar el tamaño del icono del menú */
+            margin-bottom: 5px;
         }
         .bottom-menu {
             display: flex;
             justify-content: space-around;
             margin-top: 20px;
+            margin-bottom: 20px; /* Agregar margen inferior */
         }
         .bottom-menu a {
             text-decoration: none;
@@ -100,6 +92,17 @@
         }
         .bottom-menu a:hover {
             text-decoration: underline;
+        }
+        .add-reminder {
+            text-align: center;
+            color: black;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 20px; /* Agregar margen inferior */
+        }
+        .add-reminder a {
+            color: black;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -110,24 +113,23 @@
     </div>
     <div class="container" id="reminderContainer">
         <!-- Contenedor donde se mostrarán los recordatorios -->
-        
     </div>
+    <!-- Mover el enlace fuera del contenedor principal -->
     <div class="add-reminder">
         <a href="recordatorios.html">+ Añadir recordatorio</a>
     </div>
     <div class="navbar">
-        <a href="index.html">
-            <img src="imagenes/recordatorio.png" alt="Agregar medicamento">
-            <p>Agregar medicamento</p>
+        <a href="registrar.html">
+            <img src="imagenes/recordatorio.png" alt="Agregar medicamento" style="width: 30px; height: 30px;"> <!-- Ajustar el tamaño del icono -->
+            <p style="color: black; font-size: 14px;">Agregar medicamento</p> <!-- Ajustar el color y el tamaño del texto -->
         </a>
         <a href="historial.html">
-            <img src="imagenes/historialm.png" alt="Historial">
-            <p>Historial</p>
+            <img src="imagenes/historialm.png" alt="Historial" style="width: 24px; height: 24px;"> <!-- Mantener el tamaño original del icono -->
+            <p style="color: black; font-size: 14px;">Historial</p> <!-- Ajustar el color y el tamaño del texto -->
         </a>
     </div>
-
     <script>
-        // Función para cargar y mostrar los recordatorios guardados
+        // Función para cargar y mostrar los recordatorios
         function mostrarRecordatorios() {
             var container = document.getElementById("reminderContainer");
             container.innerHTML = ""; // Limpiar el contenido existente
@@ -142,14 +144,14 @@
 
                 var reminderInfo = document.createElement("div");
                 var reminderText = document.createElement("p");
-                
+
                 // Construir el contenido del texto con HTML
                 reminderText.innerHTML = "<strong>Medicamento:</strong> " + reminder.medicationName + "<br>" +
-                                        "<strong>Dosis:</strong> " + reminder.units + "<br>" +
-                                        "<strong>Hora:</strong> " + reminder.doseTime + "<br>" +
-                                        "<strong>Inicio:</strong> " + reminder.startDate + "<br>" +
-                                        "<strong>Fin:</strong> " + reminder.endDate;
-                
+                    "<strong>Dosis:</strong> " + reminder.units + "<br>" +
+                    "<strong>Hora:</strong> " + reminder.doseTime + "<br>" +
+                    "<strong>Inicio:</strong> " + reminder.startDate + "<br>" +
+                    "<strong>Fin:</strong> " + reminder.endDate;
+
                 reminderInfo.appendChild(reminderText);
 
                 var editIcon = document.createElement("img");
@@ -174,6 +176,7 @@
         }
 
         // Mostrar los recordatorios al cargar la página
+
         mostrarRecordatorios();
     </script>
 </body>

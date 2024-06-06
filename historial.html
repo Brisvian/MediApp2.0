@@ -21,20 +21,20 @@
             margin-top: 20px;
         }
         .header img {
-            width: 50px;
-            height: 50px;
+            width: 70px; /* Aumenta el tamaño del icono */
+            height: 70px;
         }
         .header h2 {
-            margin: 0px 0;
+            margin: 0;
             font-size: 25px;
-            color: white;
+            color: black; /* Cambia el color del texto a negro */
         }
         .container {
             width: 90%;
             max-width: 400px;
             margin-top: 20px;
             flex-grow: 1;
-            overflow-y: auto; /* Permite desplazamiento si es necesario */
+            overflow-y: auto;
         }
         .record {
             background-color: #f3f3f3;
@@ -53,38 +53,46 @@
             width: 24px;
             height: 24px;
         }
-        .navbar {
-            width: 100%;
-            background-color: white;
-            padding: 10px;
-            display: flex;
-            justify-content: space-around;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-        }
-        .navbar a {
-            text-decoration: none;
-            color: #6da1a6;
-            font-size: 14px;
-            text-align: center;
-        }
-        .navbar a img {
-            width: 24px;
-            height: 24px;
-        }
+       
         /* Estilos para el mensaje del LDR */
-        #ldrMessage {
+        #ldrMessageContainer {
             background-color: white;
-            color: #333;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 70px;
             text-align: center;
-            width: 90%;
+            width: 85%;
             max-width: 400px;
+            display: flex;
+            justify-content: space-between; /* Mueve los elementos al extremo derecho */
+            align-items: center;
+            font-weight: bold; /* Texto en negrita */
+        }
+        #ldrMessage {
+            color: #333;
+            margin: 0;
+        }
+        #statusIcon {
+            width: 30px; /* Ajusta el tamaño del icono según lo necesites */
+            height: 30px;
+            margin-left: 10px; /* Ajusta el espacio entre el mensaje y el icono */
+        }
+        /* Nuevos estilos para la fecha */
+        .date-container {
+            position: absolute; /* Posición absoluta para que no afecte al flujo de los elementos */
+            left: 20px; /* Ajusta la posición a la izquierda */
+            top: 145px; /* Ajusta la posición desde la parte superior */
+            color: rgb(8, 8, 8); /* Color de la letra */
+            font-size: 20px; /* Tamaño de la letra */
+            font-weight: bold; /* Texto en negrita */
         }
     </style>
 </head>
 <body>
+    <div class="date-container">
+        <p>5 de junio de 2024</p>
+    </div>
+
     <div class="header">
         <img src="imagenes/historial.png" alt="Historial">
         <h2>Historial</h2>
@@ -95,7 +103,10 @@
     </div>
     
     <!-- Contenedor para el mensaje del LDR -->
-    <div id="ldrMessage">Cargando estado del sensor..</div>
+    <div id="ldrMessageContainer">
+        <span id="ldrMessage"></span>
+        <img src="" id="statusIcon" class="status" alt="Estado del medicamento">
+    </div>
 
     <script>
         const THINGSPEAK_CHANNEL_ID = '2570627';
@@ -118,10 +129,13 @@
                         if (statusMessage === undefined) {
                             if (numericStatus == 1) {
                                 statusMessage = "Medicamento tomado";
+                                document.getElementById('statusIcon').src = 'imagenes/correcto.png';
                             } else if (numericStatus == 2) {
                                 statusMessage = "Medicamento no tomado";
+                                document.getElementById('statusIcon').src = 'imagenes/incorrecto.png';
                             } else if (numericStatus == 0) {
                                 statusMessage = "Estado indeterminado";
+                                document.getElementById('statusIcon').src = 'incorrecto.png';
                             }
                         }
 
@@ -136,7 +150,14 @@
                     document.getElementById('ldrMessage').innerText = 'Error al obtener los datos.';
                 });
         }
+                    // Función para obtener y mostrar la fecha actual
+                    function updateDate() {
+                                const currentDate = new Date(); // Obtener la fecha actual
+                                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                                const formattedDate = currentDate.toLocaleDateString('es-ES', options); // Formatear la fecha
 
+                                document.getElementById('dateContainer').innerHTML = `<p>${formattedDate}</p>`; // Mostrar la fecha en el contenedor
+                            }
         // Llamar a la función para obtener y mostrar el estado del LDR inicialmente
         updateLDRMessage();
 
