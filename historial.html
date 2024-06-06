@@ -98,26 +98,50 @@
     <div id="ldrMessage">Cargando estado del sensor..</div>
 
     <script>
-        // Función para obtener y mostrar el estado del LDR desde el ESP32
+        const THINGSPEAK_CHANNEL_ID = '2570627';
+        const THINGSPEAK_READ_API_KEY = '1R4KBDTX4DHO1IWO';
+        const THINGSPEAK_URL = 'https://api.thingspeak.com/channels/${THINGSPEAK_CHANNEL_ID}/feeds.json?api_key=${THINGSPEAK_READ_API_KEY}&results=1';
+
+        // Función para obtener y mostrar el estado del LDR desde ThingSpeak
         function updateLDRMessage() {
-            // Reemplaza '192.168.1.74' con la dirección IP de tu ESP32
-            fetch('http://192.168.1.80/ldr')
-                .then(response => response.text())
+            // Realizar una solicitud HTTP a ThingSpeak para obtener los datos
+            fetch(THINGSPEAK_URL, { timeout: 5000 }) // Establecer un tiempo de espera de 5 segundos
+                .then(response => response.json())
                 .then(data => {
-                    // Actualizar el contenido del div con id ldrMessage
-                    document.getElementById('ldrMessage').innerText = data;
+                    if (data.feeds && data.feeds.length > 0) {
+                        // Obtener el valor del campo y el mensaje de ThingSpeak
+                        const feed = data.feeds[0];
+                        const numericStatus = feed.field1;
+                        let statusMessage = feed.field2;
+
+                        // Reemplazar mensajes según el valor numérico cuando statusMessage es undefined
+                        if (statusMessage === undefined) {
+                            if (numericStatus == 1) {
+                                statusMessage = "Medicamento tomado";
+                            } else if (numericStatus == 2) {
+                                statusMessage = "Medicamento no tomado";
+                            } else if (numericStatus == 0) {
+                                statusMessage = "Estado indeterminado";
+                            }
+                        }
+
+                        // Mostrar el mensaje en el contenedor con id ldrMessage
+                        document.getElementById('ldrMessage').innerText = statusMessage;
+                    } else {
+                        document.getElementById('ldrMessage').innerText = 'No hay datos disponibles.';
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    document.getElementById('ldrMessage').innerText = 'Error al obtener el estado del sensor.';
+                    document.getElementById('ldrMessage').innerText = 'Error al obtener los datos.';
                 });
         }
 
         // Llamar a la función para obtener y mostrar el estado del LDR inicialmente
         updateLDRMessage();
 
-        // Llamar a la función para obtener y mostrar el estado del LDR cada 3 segundos
-        setInterval(updateLDRMessage, 3000);
+        // Llamar a la función para obtener y mostrar el estado del LDR cada segundo
+        setInterval(updateLDRMessage, 1000);
     </script>
 </body>
 </html>
