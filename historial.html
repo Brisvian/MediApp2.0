@@ -89,7 +89,7 @@
     </style>
 </head>
 <body>
-    <div class="date-container">
+    <div id="date-container" class="date-container">
         <p>5 de junio de 2024</p>
     </div>
 
@@ -150,14 +150,22 @@
                     document.getElementById('ldrMessage').innerText = 'Error al obtener los datos.';
                 });
         }
-                    // Función para obtener y mostrar la fecha actual
-                    function updateDate() {
-                                const currentDate = new Date(); // Obtener la fecha actual
-                                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                                const formattedDate = currentDate.toLocaleDateString('es-ES', options); // Formatear la fecha
 
-                                document.getElementById('dateContainer').innerHTML = `<p>${formattedDate}</p>`; // Mostrar la fecha en el contenedor
-                            }
+        // Función para obtener y mostrar la fecha actual
+        function updateDate() {
+            const currentDate = new Date(); // Obtener la fecha actual
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = currentDate.toLocaleDateString('es-ES', options); // Formatear la fecha
+
+            document.getElementById('date-container').innerHTML = `<p>${formattedDate}</p>`; // Mostrar la fecha en el contenedor
+        }
+
+        // Llamar a la función para obtener y mostrar la fecha actual inicialmente
+        updateDate();
+
+        // Llamar a la función para obtener y mostrar la fecha actual cada segundo
+        setInterval(updateDate, 1000);
+
         // Llamar a la función para obtener y mostrar el estado del LDR inicialmente
         updateLDRMessage();
 

@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediAPP - Iniciar sesión</title>
     <style>
-        /* Estilos para el cuerpo de la página */
-        body {
+        /* Estilos omitidos por brevedad */
+         /* Estilos para el cuerpo de la página */
+         body {
             font-family: "Roboto", sans-serif; /* Cambia la fuente */
             height: 100vh; /* Altura de la ventana del navegador */
             margin: 0; /* Elimina el margen predeterminado */
@@ -116,7 +117,7 @@
         <!-- Título principal -->
         <h1>MediAPP</h1>
         <!-- Formulario de inicio de sesión -->
-        <form action="menu.html" method="GET">
+        <form id="loginForm">
             <!-- Campo de nombre -->
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" placeholder=" " required>
@@ -130,26 +131,56 @@
                     <img src="imagenes/ojo.png" alt="Mostrar contraseña" width="20">
                 </span>
             </div>
-            <!-- Botón de iniciar sesión -->
-            <button type="submit">Iniciar sesión</button>
-            <!-- Enlace para "olvidar contraseña" -->
-            <a href="#" id="forgot-password">¿Olvidó su contraseña?</a>
-        </form>
-    </div>
-    <script>
-        // Selecciona el campo de contraseña y el icono
-        var contraseñaInput = document.getElementById('contraseña');
-        var togglePassword = document.getElementById('toggle-password');
-
-        // Agrega un event listener para alternar la visibilidad de la contraseña
-        togglePassword.addEventListener('click', function() {
-            // Alterna el tipo de entrada entre "password" y "text"
-            if (contraseñaInput.type === 'password') {
-                contraseñaInput.type = 'text';
-            } else {
-                contraseñaInput.type = 'password';
-            }
-        });
-    </script>
-</body>
-</html>
+             <!-- Botón de iniciar sesión -->
+             <button type="submit">Iniciar sesión</button>
+             <!-- Enlace para "olvidar contraseña" -->
+             <a href="#" id="forgot-password">¿Olvidó su contraseña?</a>
+         </form>
+     </div>
+     <script>
+         // Credenciales
+         const credentials = [
+             { usuario: 'Gustavo', contraseña: '12345' },
+             { usuario: 'Brisvian', contraseña: '12345' }
+         ];
+ 
+         // Función para verificar las credenciales
+         function verificarCredenciales(usuario, contraseña) {
+             return credentials.some(credencial => credencial.usuario === usuario && credencial.contraseña === contraseña);
+         }
+ 
+         // Selecciona el formulario y los campos de nombre y contraseña
+         var loginForm = document.getElementById('loginForm');
+         var nombreInput = document.getElementById('nombre');
+         var contraseñaInput = document.getElementById('contraseña');
+         var togglePassword = document.getElementById('toggle-password');
+ 
+         // Agrega un event listener para alternar la visibilidad de la contraseña
+         togglePassword.addEventListener('click', function() {
+             // Alterna el tipo de entrada entre "password" y "text"
+             if (contraseñaInput.type === 'password') {
+                 contraseñaInput.type = 'text';
+             } else {
+                 contraseñaInput.type = 'password';
+             }
+         });
+ 
+         // Agrega un event listener para el submit del formulario
+         loginForm.addEventListener('submit', function(event) {
+             event.preventDefault(); // Evita el envío del formulario por defecto
+ 
+             // Obtiene los valores de usuario y contraseña ingresados
+             var usuario = nombreInput.value;
+             var contraseña = contraseñaInput.value;
+ 
+             // Verifica las credenciales
+             if (verificarCredenciales(usuario, contraseña)) {
+                 // Redirecciona al usuario al menú
+                 window.location.href = "menu.html";
+             } else {
+                 alert('Usuario o contraseña incorrecta.'); // Mensaje de error
+             }
+         });
+     </script>
+ </body>
+ </html>

@@ -137,19 +137,50 @@
         </form>
     </div>
     <script>
-        // Selecciona el campo de contraseña y el icono
-        var contraseñaInput = document.getElementById('contraseña');
-        var togglePassword = document.getElementById('toggle-password');
+       // Credenciales
+       const credentials = [
+             { usuario: 'Cuidador', contraseña: '12345' },
+             { usuario: 'Brisvian', contraseña: '12345' }
+         ];
+ 
+         // Función para verificar las credenciales
+         function verificarCredenciales(usuario, contraseña) {
+             return credentials.some(credencial => credencial.usuario === usuario && credencial.contraseña === contraseña);
+         }
+ 
+        // Selecciona el formulario y los campos de nombre y contraseña
+            var loginForm = document.querySelector('form'); // Corregido para seleccionar el formulario
+            var nombreInput = document.getElementById('nombre');
+            var contraseñaInput = document.getElementById('contraseña');
+            var togglePassword = document.getElementById('toggle-password');
 
-        // Agrega un event listener para alternar la visibilidad de la contraseña
-        togglePassword.addEventListener('click', function() {
-            // Alterna el tipo de entrada entre "password" y "text"
-            if (contraseñaInput.type === 'password') {
-                contraseñaInput.type = 'text';
-            } else {
-                contraseñaInput.type = 'password';
-            }
-        });
+ 
+         // Agrega un event listener para alternar la visibilidad de la contraseña
+         togglePassword.addEventListener('click', function() {
+             // Alterna el tipo de entrada entre "password" y "text"
+             if (contraseñaInput.type === 'password') {
+                 contraseñaInput.type = 'text';
+             } else {
+                 contraseñaInput.type = 'password';
+             }
+         });
+ 
+         // Agrega un event listener para el submit del formulario
+         loginForm.addEventListener('submit', function(event) {
+             event.preventDefault(); // Evita el envío del formulario por defecto
+ 
+             // Obtiene los valores de usuario y contraseña ingresados
+             var usuario = nombreInput.value;
+             var contraseña = contraseñaInput.value;
+ 
+             // Verifica las credenciales
+             if (verificarCredenciales(usuario, contraseña)) {
+                 // Redirecciona al usuario al menú
+                 window.location.href = "historial.html";
+             } else {
+                 alert('Usuario o contraseña incorrecta.'); // Mensaje de error
+             }
+         });
     </script>
 </body>
 </html>
